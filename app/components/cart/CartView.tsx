@@ -97,6 +97,7 @@ export default function CartView() {
   };
 
   const PLACEHOLDER = "/images/product-placeholder.jpg";
+  const count = items.reduce((n, i) => n + i.qty, 0);
   const subtotal = items.reduce((n, i) => n + i.price * i.qty, 0);
   const discount = applied ? subtotal * PROMO_RATE : 0;
   const afterDiscount = subtotal - discount;
