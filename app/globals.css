@@ -20,20 +20,7 @@
 }
 
 html {
-  scroll-snap-type: y mandatory;
-  scroll-padding-top: 0;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-snap-type: y mandatory;
-  }
+  overscroll-behavior: none;
 }
 
 body {

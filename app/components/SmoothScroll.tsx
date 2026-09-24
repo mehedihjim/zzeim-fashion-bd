@@ -22,6 +22,9 @@ export default function SmoothScroll() {
 
     snap.addElements(sections, { align: "start" });
 
+    const footer = document.querySelector<HTMLElement>("body > footer");
+    if (footer) snap.addElement(footer, { align: "end" });
+
     return () => {
       snap.destroy();
       lenis.destroy();

@@ -3,6 +3,7 @@ import { Smooch_Sans } from "next/font/google";
 import "./globals.css";
 import TopBar from "./components/TopBar";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 const smooch = Smooch_Sans({
   variable: "--font-smooch",
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <TopBar />
         <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );
