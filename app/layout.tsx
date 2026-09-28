@@ -5,6 +5,8 @@ import TopBar from "./components/TopBar";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { CartProvider } from "./context/CartContext";
+import { AuthProvider } from "./context/AuthContext";
+import { WishlistProvider } from "./context/WishlistContext";
 
 const smooch = Smooch_Sans({
   variable: "--font-smooch",
@@ -21,12 +23,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${smooch.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
-        <CartProvider>
-          <TopBar />
-          <Navbar />
-          {children}
-          <Footer />
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <WishlistProvider>
+              <TopBar />
+              <Navbar />
+              {children}
+              <Footer />
+            </WishlistProvider>
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

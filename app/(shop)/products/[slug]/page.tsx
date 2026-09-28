@@ -130,6 +130,7 @@ export default async function ProductPage({ params }: Props) {
 
           <div className="mt-10">
             <ProductPurchase
+              slug={slug}
               sizes={product.sizes ?? defaultSizes[gender]}
               colors={colors}
             />

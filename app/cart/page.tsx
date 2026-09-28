@@ -4,35 +4,9 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Lock, Minus, Plus, X } from "lucide-react";
+import { useCart } from "@/app/context/CartContext";
 
-type Item = {
-  id: string;
-  name: string;
-  variant: string;
-  price: number;
-  qty: number;
-  image?: string;
-};
-
-const initialItems: Item[] = [
-  {
-    id: "coat-01",
-    name: "Tailored wool coat",
-    variant: "Ladies · Size M · Black",
-    price: 420,
-    qty: 1,
-    image: "/images/product-placeholder.jpg",
-  },
-  {
-    id: "shirt-02",
-    name: "Slim-fit overshirt",
-    variant: "Gentlemen · Size L · Charcoal",
-    price: 185,
-    qty: 1,
-    image: "/images/product-placeholder.jpg",
-  },
-];
-
+const PLACEHOLDER = "/images/product-placeholder.jpg";
 const FREE_SHIPPING_AT = 150;
 const FLAT_SHIPPING = 12;
 const PROMO_CODE = "ZZEIM10";
@@ -42,6 +16,12 @@ const money = (n: number) =>
   new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(
     n,
   );
+
+const genderLabel = {
+  ladies: "Ladies",
+  gentlemen: "Gentlemen",
+  unisex: "Unisex",
+};
 
 const label = "text-[15px] font-normal uppercase tracking-[0.3em] text-white";
 const ghostBtn =
@@ -69,20 +49,20 @@ function Row({
 }
 
 export default function CartView() {
-  const [items, setItems] = useState<Item[]>(initialItems);
+  const { lines, count, ready, setQty, remove } = useCart();
   const [code, setCode] = useState("");
   const [applied, setApplied] = useState(false);
   const [promoError, setPromoError] = useState("");
 
-  const setQty = (id: string, qty: number) =>
-    setItems((list) =>
-      list.map((i) =>
-        i.id === id ? { ...i, qty: Math.min(10, Math.max(1, qty)) } : i,
-      ),
-    );
-
-  const remove = (id: string) =>
-    setItems((list) => list.filter((i) => i.id !== id));
+  // Shape cart lines like the old items so the JSX below reads the same
+  const items = lines.map((l) => ({
+    id: l.id,
+    name: l.product.name,
+    variant: `${genderLabel[l.product.gender]} · Size ${l.size}`,
+    price: l.product.price,
+    qty: l.qty,
+    image: l.product.image,
+  }));
 
   const applyPromo = (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,7 +75,6 @@ export default function CartView() {
     }
   };
 
-  const count = items.reduce((n, i) => n + i.qty, 0);
   const subtotal = items.reduce((n, i) => n + i.price * i.qty, 0);
   const discount = applied ? subtotal * PROMO_RATE : 0;
   const afterDiscount = subtotal - discount;
@@ -104,6 +83,9 @@ export default function CartView() {
   const total = afterDiscount + shipping;
   const remaining = Math.max(0, FREE_SHIPPING_AT - afterDiscount);
   const progress = Math.min(100, (afterDiscount / FREE_SHIPPING_AT) * 100);
+
+  // Avoid flashing the empty state before localStorage is read
+  if (!ready) return <main className="flex-1 pt-28" />;
 
   return (
     <main className="mx-auto w-full max-w-[2100px] flex-1 px-4 pb-20 pt-28 md:px-6 md:pt-32 lg:px-8">
@@ -123,7 +105,7 @@ export default function CartView() {
             gentlemen.
           </p>
           <Link
-            href="/"
+            href="/wardrobe"
             className="group inline-flex items-center gap-4 border-b border-white/35 bg-black/25 px-7 py-3 text-lg font-light uppercase tracking-[0.3em] text-white transition-colors duration-300 hover:border-wine hover:bg-wine"
           >
             Continue shopping
@@ -140,7 +122,7 @@ export default function CartView() {
                 >
                   <div className="relative aspect-[3/4] w-24 shrink-0 overflow-hidden bg-[#151518] sm:w-32 md:w-36">
                     <Image
-                      src={i.image ?? "/images/product-placeholder.jpg"}
+                      src={i.image ?? PLACEHOLDER}
                       alt={i.name}
                       fill
                       sizes="144px"
@@ -203,7 +185,7 @@ export default function CartView() {
               ))}
             </ul>
 
-            <Link href="/" className={`${ghostBtn} mt-8 w-fit`}>
+            <Link href="/wardrobe" className={`${ghostBtn} mt-8 w-fit`}>
               <ArrowLeft size={18} strokeWidth={1.25} />
               Continue shopping
             </Link>

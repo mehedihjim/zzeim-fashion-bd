@@ -2,26 +2,32 @@
 
 import { useState } from "react";
 import { Heart } from "lucide-react";
+import { useCart } from "@/app/context/CartContext";
+import { useWishlist } from "@/app/context/WishlistContext";
 
 export default function ProductPurchase({
+  slug,
   sizes,
   colors,
 }: {
+  slug: string;
   sizes: string[];
   colors: string[];
 }) {
+  const { add } = useCart();
   const [size, setSize] = useState<string | null>(null);
   const [color, setColor] = useState(0);
   const [error, setError] = useState(false);
   const [added, setAdded] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const { has, toggle } = useWishlist();
+  const saved = has(slug);
 
   const addToBag = () => {
     if (!size) {
       setError(true);
       return;
     }
-    // TODO: hook into your cart state here
+    add(slug, size, color);
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };
@@ -98,7 +104,7 @@ export default function ProductPurchase({
           type="button"
           aria-label={saved ? "Remove from wishlist" : "Add to wishlist"}
           aria-pressed={saved}
-          onClick={() => setSaved((v) => !v)}
+          onClick={() => toggle(slug)}
           className="flex w-14 items-center justify-center border border-white/20 text-white transition-colors hover:border-white/60"
         >
           <Heart

@@ -1,12 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/app/data/products";
+import WishlistButton from "./WishlistButton";
 
 export default function ProductCard({ product }: { product: Product }) {
   const { slug, name, price, category, colors, image, isNew } = product;
 
   return (
     <li>
+      <WishlistButton slug={slug} className="absolute right-2 top-2 z-10" />
       <Link href={`/products/${slug}`} className="group block">
         <div className="relative aspect-[3/4] overflow-hidden bg-white/[0.04]">
           {image ? (
