@@ -4,14 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Heart, Search, ShoppingBag, User } from "lucide-react";
+import { useCart } from "@/app/context/CartContext";
 
 const links = [
-  { label: "Wardrobe", href: "/#wardrobe" },
-  { label: "Ladies", href: "/#ladies" },
-  { label: "Gentlemen", href: "/#gentlemen" },
+  { label: "Wardrobe", href: "/wardrobe" },
+  { label: "Ladies", href: "/ladies" },
+  { label: "Gentlemen", href: "/gentlemen" },
 ];
-
-const CART_COUNT = 2;
 
 const iconBtn =
   "relative flex h-9 w-9 items-center justify-center text-foreground/70 transition-colors duration-300 hover:text-white";
@@ -22,6 +21,7 @@ export default function Navbar() {
   const searchRef = useRef<HTMLInputElement>(null);
   const [stuck, setStuck] = useState(false);
   const [panel, setPanel] = useState<Panel>(null);
+  const { count } = useCart();
 
   const toggle = (p: Exclude<Panel, null>) =>
     setPanel((cur) => (cur === p ? null : p));
@@ -113,9 +113,9 @@ export default function Navbar() {
 
           <Link href="/cart" aria-label="Cart" className={iconBtn}>
             <ShoppingBag size={20} strokeWidth={1.25} />
-            {CART_COUNT > 0 && (
+            {count > 0 && (
               <span className="absolute right-0.5 top-1 min-w-3.75 rounded-full bg-wine px-1 text-center text-[11px] leading-3.75 text-white">
-                {CART_COUNT}
+                {count}
               </span>
             )}
           </Link>
