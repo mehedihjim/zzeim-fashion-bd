@@ -89,7 +89,7 @@ export default function Footer() {
             fontWeight="300"
             className="fill-wine"
           >
-            ZZEIM FASHION
+            ZZEIM® FASHION
           </text>
         </svg>
       </div>
