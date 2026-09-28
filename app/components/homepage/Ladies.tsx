@@ -14,9 +14,10 @@ export default function Ladies() {
         loop
         playsInline
         preload="metadata"
-        poster="/videos/ladies-poster.jpg"
+        poster="/videos/ladies-poster.webp"
         aria-hidden
       >
+        <source src="/videos/ladies.webm" type="video/webm" />
         <source src="/videos/ladies.mp4" type="video/mp4" />
       </video>
 

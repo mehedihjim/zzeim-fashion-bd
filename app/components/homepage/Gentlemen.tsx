@@ -14,9 +14,10 @@ export default function Gentlemen() {
         loop
         playsInline
         preload="metadata"
-        poster="/videos/gentlemen-poster.jpg"
+        poster="/videos/gentlemen-poster.webp"
         aria-hidden
       >
+        <source src="/videos/gentlemen.webm" type="video/webm" />
         <source src="/videos/gentlemen.mp4" type="video/mp4" />
       </video>
 
